@@ -1,0 +1,30 @@
+Highcharts.chart('XXXcontainerXXX', {
+    chart: {height: 170, backgroundColor: '#ffffff', },
+    exporting: { enabled: false },
+    tooltip: {shadow:false,shared: true,backgroundColor: '#fefefe',borderColor:'#cccccc',enabled:!0,
+    positioner: function (boxWidth, boxHeight, point) {
+          if (point.plotX < (document.getElementById('XXXcontainerXXX').clientWidth - 220)) {
+          return { x: point.plotX,
+              y: 0 };
+          } else {
+          return { x:(document.getElementById('XXXcontainerXXX').clientWidth - 220),
+              y:0};
+          }
+        },
+    crosshairs: true,useHTML: true,
+    headerFormat: '<div class=tipbox><div class=tipdate>{point.key}</div>',
+    pointFormat: '<div class=tipseries>{series.name}: </div>' +
+        '<div class=tipvalue>{point.y} </div></div>',
+        valueDecimals: 2},
+    title: {text: ''},
+    xAxis: {type: 'datetime', reversed: true},
+    yAxis: {title: {text: ''}},
+    legend: {enabled: false},
+    plotOptions: {series: {pointPadding: 0,groupPadding: 0,borderWidth: 1,shadow: false}
+    },
+    series: [{
+      type: 'column',
+      name: 'Page load Time',
+      data:XXXdataXXX,
+      color: '#XXXcolourXXX',}]
+});

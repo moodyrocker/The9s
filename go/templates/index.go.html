@@ -1,0 +1,69 @@
+{{define "index1"}}
+{{template "header"}}
+<body>
+{{template "nav"}}
+
+<style>
+.parallax {
+  /* The image used */
+  background-image: url("/static/bg1.png");
+
+  /* Set a specific height */
+  min-height: 700px;
+
+  /* Create the parallax scrolling effect */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.parallax_d {
+  /* The image used */
+  background-image: url("/static/stats_bg.png");
+  background-repeat: no-repeat;
+}
+
+</style>
+<div class="parallax1">
+<div class="uk-container uk-padding ">
+
+      <div class="uk-width-4-5">
+      <p style="padding-top:20%; font-size: 55px;"><b class="uk-text-emphasis">THE NINES</b>, status pages you'll love & want to look at all day.<BR> Number of checks so far...<br>
+        <span class="odometer uk-heading-hero" id="odometer" style="background-color:#2d2d2d; padding:10px; color:#ffffff; letter-spacing:15px"> </span></p>
+
+    </div>
+</div>
+</div><!--- container end --->
+
+<div class="uk-light uk-background-secondary">
+<div class="uk-container uk-padding" >
+<div uk-grid>
+
+        <div class="uk-width-1-5" style=" font-size: 40px;">DEMOS</div>
+
+      <div class="uk-width-4-5">
+        <button class="uk-button uk-button-primary" style="margin:2px 0px" onclick="window.location.href='http://127.0.0.1:8081/stats/1_1d.html'">Single Stats Airbnb</button>
+        <button class="uk-button uk-button-primary" style="margin:2px 0px" onclick="window.location.href='http://127.0.0.1:8081/stats/6_1d.html'">Multi Stats collection 1</button>
+        <button class="uk-button uk-button-primary" style="margin:2px 0px" onclick="window.location.href='http://127.0.0.1:8081/stats/10_1d.html'">Multi Stats collection 2</button>
+    </div>
+    </div>
+</div>
+</div><!--- container end --->
+
+
+<div class="">
+<div class="uk-container uk-padding ">
+
+{{template "mailchimp"}}
+
+</div>
+</div><!--- container end --->
+
+
+{{template "odometer"}}
+{{template "footer"}}
+</body>
+</html>
+
+{{end}}

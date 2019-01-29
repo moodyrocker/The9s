@@ -1,0 +1,10 @@
+<div style="border-top: 1px solid #cccccc;" class="uk-padding-small uk-text-large ">
+  <div class="uk-container">
+ <div class="uk-inline uk-flex XXXstatusXXX" style="color:#XXXcolourXXX">
+ <div class="uk-width-2-5 uk-text-left" style="font-size: medium">
+ <a class="uk-text-uppercase" href="{{template "GraphTitleLink_AXAA"}}" style="color:inherit">{{template "GraphTitle_AXAA"}}</a></div>
+ <div class="uk-width-1-4">{{template "AVGResponseTime_AXAA"}} sec <p class="uk-text-small">{{template "UptimeStats_AXAA" }}%  uptime for {{template "TimeFrameFormat_AXAA"}}</p></div>
+ <div class="uk-width-2-4" id="containerAXAA"></div>
+</div>
+</div>
+</div>

@@ -1,0 +1,36 @@
+{{define "contact"}}
+{{template "header"}}
+<body>
+{{template "nav"}}
+
+<div class="uk-container">
+
+<div class="uk-padding-large">
+<h1 class="uk-heading-hero" style="padding:40px 0">HAY HELLO!</h1>
+<div class="uk-width-2-3">
+  <p class="uk-text-large">We’re here to help & answer any question you might have. We look forward to hearing from you. <a href="#">hello@thenines.io</a></p>
+  <p class="uk-text-large">Or just join the Newsletter below</p>
+
+
+  {{template "mailchimp"}}
+
+<BR><BR>
+<ul class="uk-list">
+<img style="padding:8px " src="/static/bogo-grey.svg">
+<img  style="padding:8px " src="/static/company-logo_hummel-grey.svg">
+<img  style="padding:8px " src="/static/company-logo_matas-grey.svg">
+<img  style="padding:8px " src="/static/campaign-monitor-grey.svg">
+<img  style="padding:8px " src="/static/silvan-grey.svg">
+<img  style="padding:8px " src="/static/coop-grey.svg">
+<img  style="padding:8px " src="/static/3-grey.svg">
+<img  style="padding:8px " src="/static/nordea-grey.svg">
+  </ul>
+
+
+  </div>
+  </div><!--- container end --->
+</div>
+{{template "footer"}}
+</body>
+</html>
+{{end}}

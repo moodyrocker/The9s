@@ -1,0 +1,38 @@
+{{template "header"}}
+<body>
+{{template "nav"}}
+
+
+
+
+<div class="uk-background-fixed uk-background-center-center uk-height-large" style="background-image: url(/static/img/bg_0723081632.jpg);">
+
+    <div class="uk-container uk-padding uk-align-center ">
+        <form method="post">
+
+            <input type="email" name="username" placeholder="email"><br>
+            <input type="text" name="password" placeholder="password"><br>
+            <input type="text" name="firstname" placeholder="first name"><br>
+            <input type="text" name="lastname" placeholder="last name"><br>
+            <input type="submit">
+
+        </form>
+
+
+        {{if .First}}
+        USER NAME {{.UserName}}<br>
+        FIRST {{.First}}<br>
+        LAST {{.Last}}<br>
+        {{end}}
+
+
+        <a href="/mypage">my Page</a>
+    </div><!--- container end --->
+</div>
+
+
+
+
+
+
+{{template "footer"}}

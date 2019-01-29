@@ -1,0 +1,67 @@
+{{define "faq1"}}
+{{template "header"}}
+<body id="top">
+{{template "nav"}}
+
+<div class="uk-background-fixed uk-background-center-center uk-height-large" style="background-image: url(/static/img/bg_0723081632.jpg);">
+<div class="uk-container">
+<div class="uk-inline uk-flex uk-padding-small">
+
+<div class="uk-width-1-4">
+  <ul class="uk-list uk-list-divider" >
+    <li><a class="uk-link-heading" href="#Basics" uk-scroll>Basics</a></li>
+    <li><a class="uk-link-heading" href="#Technicaldetails" uk-scroll>Technical details</a></li>
+    <li><a class="uk-link-heading" href="#UserGuide" uk-scroll>User Guide</a></li>
+    <li><a class="uk-link-heading" href="#Other" uk-scroll>Other</a></li>
+
+  </ul>
+</div>
+
+<div class="uk-width-2-3" style="padding-left:40px">
+<H2>
+  <a id="Basics" class="uk-link-reset">Basics</a></H2>
+<article>
+      <p class="uk-text-lead">    What is a HTTP status code?</p>
+      <p>HTTP status codes are standard response codes given by website servers on the internet. The codes help identify the cause of the problem when a web page or other resource does not load properly. To keep things simple 2XX and 3XX are good responses 4XX and 5XX are bad, for a full list of code follow the link.</p>
+      <p><a href="https://www.restapitutorial.com/httpstatuscodes.html"> Full HTTP codes</a> </p>
+      <a href="#top" uk-totop uk-scroll></a>
+</article>
+<H2 ><a id="Technicaldetails" class="uk-link-reset">Technical details</a></H2>
+<article>
+      <p class="uk-text-lead">How do you get this data?</p>
+      <p>We have a number instances running in AWS in 6 global locations, each instance makes a request to a URL that emulates a real user. In the sense that a browser is opened and a request is made the information that we get back is recorded in a central database. </p>
+      <p>What you see in the graph is an aggregation of the response times, in future versions of TheNINEs we will enable a break down of times from each location. This will allow you to see where the customer is seeing slowness.</p>
+      <p>https://www.sitespeed.io/</p>
+            <a href="#top" uk-totop uk-scroll></a>
+</article>
+<article>
+      <p class="uk-text-lead">How often do you check websites?</p>
+      <p>In the Alpha version of the9s, we test each URL every 5mins. In future versions, we hope to test as frequent as 10s. From experience, this is not that useful however this is more about  showing capabilities.</p>
+      <a href="#top" uk-totop uk-scroll></a>
+</article>
+<H2 ><a id="UserGuide" class="uk-link-reset">User Guide</a></H2>
+<article>
+      <p class="uk-text-lead">coming soon</p>
+      <p>...</p>
+            <a href="#top" uk-totop uk-scroll></a>
+</article>
+<H2 ><a id="Other" class="uk-link-reset">Other</a></H2>
+<article>
+      <p class="uk-text-lead">Coming soon</p>
+      <p>...</p>
+            <a href="#top" uk-totop uk-scroll></a>
+</article>
+
+
+
+</div>
+
+</div>
+
+
+</div><!--- container end --->
+
+{{template "footer"}}
+</body>
+</html>
+{{end}}
