@@ -21,23 +21,21 @@ var err error
 func init() {
 	tpl = template.Must(template.ParseGlob("templates/*.go.html"))
 
-	//db, err = sql.Open("postgres", "postgres://bond:password@localhost/bookstore?sslmode=disable")
 	db, err = sql.Open("sqlite3", "/home/vagrant/The9s/the9s")
 	fmt.Println("You connected to your database.")
-
 }
 
-type addurl struct {
-	url       string
-	short_url string
-	u_id      string
+type Add_url struct {
+	U_id      string
+	Short_url string
+	Long_url  string
 }
 
 type url struct {
-	url_id    string
-	url       string
-	short_url string
-	u_id      string
+	Url_id    string
+	U_id      string
+	Long_url  string
+	Short_url string
 }
 
 func main() {
@@ -48,8 +46,10 @@ func main() {
 	router.GET("/faq", faq)
 	router.GET("/about", about)
 
-	router.GET("/form", form)
-	router.POST("/form", forminsert)
+	router.POST("/form/insert", forminsert)
+	router.GET("/form", formshowurls)
+	router.GET("/form/delete", formdeleteurl)
+	router.GET("/form/edit", formediturl)
 
 	router.GET("/tandc", tc)
 	router.GET("/pp", pp)
@@ -59,13 +59,81 @@ func main() {
 	http.ListenAndServe(":80", router)
 }
 
+func formdeleteurl(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	url_id := r.FormValue("url")
+	if url_id == "" {
+		http.Error(w, http.StatusText(400), http.StatusBadRequest)
+		return
+	}
+	_ = db
+	_, err = db.Exec("delete from url where url_id = ?", url_id)
+	if err != nil {
+		fmt.Printf("parsing failed: %s", err)
+		return
+	}
+
+	http.Redirect(w, r, "/form", http.StatusSeeOther)
+}
+
+//// /// // //
+func formediturl(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	tpi := filepath.Join("templates", "inc.go.html")
+	lis := filepath.Join("templates", "inc_list.go.html")
+	id := filepath.Join("templates", "forminsert.go.html")
+	// get form values
+
+	u, err := url.Parse(s)
+	if err != nil {
+		panic(err)
+	}
+
+	//ul := Add_url{}
+	//ul.U_id = r.FormValue("u_id")
+	//ul.Short_url = r.FormValue("short_url")
+	//ul.Long_url = r.FormValue("long_url")
+
+	_ = db
+	_, err = db.Exec("delete from url where url_id = ?", url_id)
+	if err != nil {
+		fmt.Printf("parsing failed: %s", err)
+		return
+	}
+
+	tpli, err := template.ParseFiles(tpi, id, lis)
+	_ = db
+	_, err = db.Exec("INSERT INTO url(url, short_url, u_id) VALUES(?,?,?)", ul.Long_url, ul.Short_url, ul.U_id)
+	if err != nil {
+		fmt.Printf("parsing failed: %s", err)
+		return
+	}
+
+	tpli.ExecuteTemplate(w, "form", ul)
+}
+
+///// /// /// // ////
 func forminsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
+	id := filepath.Join("templates", "forminsert.go.html")
+	// get form values
+	ul := Add_url{}
+	ul.U_id = r.FormValue("u_id")
+	ul.Short_url = r.FormValue("short_url")
+	ul.Long_url = r.FormValue("long_url")
+
+	tpli, err := template.ParseFiles(tpi, id, lis)
+	_ = db
+	_, err = db.Exec("INSERT INTO url(url, short_url, u_id) VALUES(?,?,?)", ul.Long_url, ul.Short_url, ul.U_id)
+	if err != nil {
+		fmt.Printf("parsing failed: %s", err)
+		return
+	}
+	tpli.ExecuteTemplate(w, "form", ul)
+}
+func formshowurls(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	tpi := filepath.Join("templates", "inc.go.html")
+	lis := filepath.Join("templates", "inc_list.go.html")
 	id := filepath.Join("templates", "form.go.html")
-	furl := r.FormValue("url")
-	fsu := r.FormValue("short_url")
-	fu_id := r.FormValue("u_id")
 	tpli, err := template.ParseFiles(tpi, id, lis)
 	//log.Println(tpli) asdihasnpi
 	if err != nil {
@@ -76,23 +144,13 @@ func forminsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	tpli.ExecuteTemplate(w, "form", addurl{furl, fsu, fu_id})
-}
-
-// https://www.calhoun.io/intro-to-templates-p2-actions/
-// https://www.thepolyglotdeveloper.com/2017/04/using-sqlite-database-golang-application/
-func form(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	tpi := filepath.Join("templates", "inc.go.html")
-	lis := filepath.Join("templates", "inc_list.go.html")
-	id := filepath.Join("templates", "form.go.html")
-	tpli, err := template.ParseFiles(tpi, id, lis)
 
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
 		return
 	}
 
-	rows, err := db.Query("SELECT * FROM url")
+	rows, err := db.Query("select url_id, u_id, url, short_url from url")
 	if err != nil {
 		http.Error(w, http.StatusText(400), 400)
 		return
@@ -102,23 +160,19 @@ func form(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	urls := make([]url, 0)
 	for rows.Next() {
 		uurl := url{}
-		err := rows.Scan(&uurl.url_id, &uurl.url, &uurl.short_url, &uurl.u_id) // order matters
+		err := rows.Scan(&uurl.Url_id, &uurl.U_id, &uurl.Long_url, &uurl.Short_url) // order matters
 		if err != nil {
-			http.Error(w, http.StatusText(305), 305)
+			log.Fatal(err)
 			return
 		}
 		urls = append(urls, uurl)
 	}
 	if err = rows.Err(); err != nil {
-		http.Error(w, http.StatusText(200), 200)
+		log.Fatal(err)
 		return
 	}
-	for _, url := range urls {
-		fmt.Fprintf(w, " %s, %s, %s\n", url.url, url.short_url, url.u_id)
-	}
-	tpli.ExecuteTemplate(w, "form", nil)
+	tpli.ExecuteTemplate(w, "form", urls)
 }
-
 func faq(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")

@@ -27,17 +27,10 @@ func init() {
 
 }
 
-type addurl struct {
-	url       string
-	short_url string
-	u_id      string
-}
-
 type url struct {
-	url_id    string
-	url       string
-	short_url string
-	u_id      string
+	U_id      string
+	Short_url string
+	Long_url  string
 }
 
 func main() {
@@ -48,8 +41,8 @@ func main() {
 	router.GET("/faq", faq)
 	router.GET("/about", about)
 
-	router.GET("/form", form)
 	router.POST("/form", forminsert)
+	router.GET("/form", form)
 
 	router.GET("/tandc", tc)
 	router.GET("/pp", pp)
@@ -63,9 +56,10 @@ func forminsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
 	id := filepath.Join("templates", "form.go.html")
-	furl := r.FormValue("url")
-	fsu := r.FormValue("short_url")
-	fu_id := r.FormValue("u_id")
+	u_id := r.FormValue("u_id")
+	short_url := r.FormValue("short_url")
+	long_url := r.FormValue("long_url")
+
 	tpli, err := template.ParseFiles(tpi, id, lis)
 	//log.Println(tpli) asdihasnpi
 	if err != nil {
@@ -76,49 +70,29 @@ func forminsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	tpli.ExecuteTemplate(w, "form", addurl{furl, fsu, fu_id})
+	tpli.ExecuteTemplate(w, "form", url{u_id, short_url, long_url})
 }
 
-// https://www.calhoun.io/intro-to-templates-p2-actions/
-// https://www.thepolyglotdeveloper.com/2017/04/using-sqlite-database-golang-application/
 func form(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
 	id := filepath.Join("templates", "form.go.html")
+
 	tpli, err := template.ParseFiles(tpi, id, lis)
-
-	if r.Method != "GET" {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
-
-	rows, err := db.Query("SELECT * FROM url")
+	//log.Println(tpli) asdihasnpi
 	if err != nil {
-		http.Error(w, http.StatusText(400), 400)
+		// Log the detailed error
+		//      log.Println(err.Error())
+		fmt.Printf("parsing failed: %s", err)
+		// Return a generic "Internal Server Error" message
+		http.Error(w, http.StatusText(500), 500)
 		return
-	}
-	defer rows.Close()
-
-	urls := make([]url, 0)
-	for rows.Next() {
-		uurl := url{}
-		err := rows.Scan(&uurl.url_id, &uurl.url, &uurl.short_url, &uurl.u_id) // order matters
-		if err != nil {
-			http.Error(w, http.StatusText(305), 305)
-			return
-		}
-		urls = append(urls, uurl)
-	}
-	if err = rows.Err(); err != nil {
-		http.Error(w, http.StatusText(200), 200)
-		return
-	}
-	for _, url := range urls {
-		fmt.Fprintf(w, " %s, %s, %s\n", url.url, url.short_url, url.u_id)
 	}
 	tpli.ExecuteTemplate(w, "form", nil)
 }
 
+// https://www.calhoun.io/intro-to-templates-p2-actions/
+// https://www.thepolyglotdeveloper.com/2017/04/using-sqlite-database-golang-application/
 func faq(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")

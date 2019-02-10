@@ -23,21 +23,20 @@ func init() {
 
 	//db, err = sql.Open("postgres", "postgres://bond:password@localhost/bookstore?sslmode=disable")
 	db, err = sql.Open("sqlite3", "/home/vagrant/The9s/the9s")
+	if err != nil {
+		panic(err)
+	}
+
+	if err = db.Ping(); err != nil {
+		panic(err)
+	}
 	fmt.Println("You connected to your database.")
 
 }
 
-type addurl struct {
-	url       string
-	short_url string
-	u_id      string
-}
-
-type url struct {
-	url_id    string
-	url       string
-	short_url string
-	u_id      string
+type urls struct {
+	Url       string
+	Short_url string
 }
 
 func main() {
@@ -63,9 +62,9 @@ func forminsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
 	id := filepath.Join("templates", "form.go.html")
-	furl := r.FormValue("url")
-	fsu := r.FormValue("short_url")
-	fu_id := r.FormValue("u_id")
+
+	url := r.FormValue("url")
+	su := r.FormValue("short_url")
 	tpli, err := template.ParseFiles(tpi, id, lis)
 	//log.Println(tpli) asdihasnpi
 	if err != nil {
@@ -76,48 +75,36 @@ func forminsert(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	tpli.ExecuteTemplate(w, "form", addurl{furl, fsu, fu_id})
+	tpli.ExecuteTemplate(w, "form", urls{url, su})
 }
 
-// https://www.calhoun.io/intro-to-templates-p2-actions/
-// https://www.thepolyglotdeveloper.com/2017/04/using-sqlite-database-golang-application/
 func form(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
-	tpi := filepath.Join("templates", "inc.go.html")
-	lis := filepath.Join("templates", "inc_list.go.html")
-	id := filepath.Join("templates", "form.go.html")
-	tpli, err := template.ParseFiles(tpi, id, lis)
-
-	if r.Method != "GET" {
-		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
-		return
-	}
 
 	rows, err := db.Query("SELECT * FROM url")
-	if err != nil {
-		http.Error(w, http.StatusText(400), 400)
-		return
-	}
 	defer rows.Close()
 
-	urls := make([]url, 0)
+	bks := make([]urls, 0)
 	for rows.Next() {
-		uurl := url{}
-		err := rows.Scan(&uurl.url_id, &uurl.url, &uurl.short_url, &uurl.u_id) // order matters
+		bk := urls{}
+		err := rows.Scan(&bk.Url, &bk.Short_url) // order matters
 		if err != nil {
-			http.Error(w, http.StatusText(305), 305)
+			http.Error(w, http.StatusText(500), 500)
 			return
 		}
-		urls = append(urls, uurl)
+		bks = append(bks, bk)
 	}
 	if err = rows.Err(); err != nil {
-		http.Error(w, http.StatusText(200), 200)
+		http.Error(w, http.StatusText(500), 500)
 		return
 	}
-	for _, url := range urls {
-		fmt.Fprintf(w, " %s, %s, %s\n", url.url, url.short_url, url.u_id)
+	for _, bk := range bks {
+		fmt.Fprintf(w, "%s, %s\n", bk.Url, bk.Short_url)
 	}
-	tpli.ExecuteTemplate(w, "form", nil)
 }
+
+//
+//
+//
 
 func faq(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
@@ -135,6 +122,7 @@ func faq(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	tpli.ExecuteTemplate(w, "faq1", nil)
 }
+
 func about(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
@@ -151,6 +139,7 @@ func about(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	tpli.ExecuteTemplate(w, "about", nil)
 }
+
 func contact(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
@@ -167,6 +156,7 @@ func contact(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	tpli.ExecuteTemplate(w, "contact", nil)
 }
+
 func tc(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
@@ -184,6 +174,7 @@ func tc(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	tpli.ExecuteTemplate(w, "tc", nil)
 }
+
 func pp(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
@@ -201,6 +192,7 @@ func pp(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	err = tpli.ExecuteTemplate(w, "pp", nil)
 
 }
+
 func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	tpi := filepath.Join("templates", "inc.go.html")
 	lis := filepath.Join("templates", "inc_list.go.html")
@@ -218,6 +210,7 @@ func index(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	}
 	tpli.ExecuteTemplate(w, "index1", nil)
 }
+
 func serveTemplate(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	s := strings.Split(ps.ByName("name"), "_")
 	counnt := s[0]
