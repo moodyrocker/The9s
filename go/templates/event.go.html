@@ -1,0 +1,48 @@
+{{define "form"}}
+{{template "header"}}
+<body id="top">
+{{template "nav"}}
+
+<div class="uk-background-fixed uk-background-center-center uk-height-large" style="background-image: url(/static/img/bg_0723081632.jpg);">
+<div class="uk-container">
+<div class="uk-inline uk-flex uk-padding-small">
+
+<div class="uk-width-1-4">
+  <ul class="uk-list uk-list-divider" >
+    <li><a class="uk-link-heading" href="#Other" uk-scroll>Add URL</a></li>
+
+  </ul>
+</div>
+
+
+<div class="uk-width-2-3" style="padding-left:40px">
+
+Create event or noticeeeee for <b>{{.Short_url}}</b>
+  <form class="uk-form-stacked" action="/event/insert" method="post">
+    <input type="hidden" name="url_id" value="{{.Url_id}}">
+        <input type="hidden" name="s_id" value="0">
+
+    <div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+      <label><input class="uk-radio" type="radio" name="event_status" value="DEFAULT"> INFO</label>
+      <label><input class="uk-radio" type="radio" name="event_status" value="warning"> Warning</label>
+      <label><input class="uk-radio" type="radio" name="event_status" value="danger"> ERROR</label>
+      <label><input class="uk-radio" type="radio" name="event_status" value="success"> HAPPY</label>
+ </div>
+
+  <div class="uk-margin">
+    <textarea class="uk-textarea" rows="5" placeholder="More info..." name="event_info"></textarea>
+    </div>
+    <button class="uk-button uk-button-default uk-button-small">UPDATE URL</button>
+    <button class="uk-button uk-button-default uk-button-small" onclick="/url">Cancel</button>
+
+  </form>
+
+  </div>
+  </div>
+
+</div><!--- container end --->
+
+{{template "footer"}}
+</body>
+</html>
+{{end}}

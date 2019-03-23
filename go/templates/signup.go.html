@@ -1,27 +1,38 @@
+{{define "signup"}}
 {{template "header"}}
 <body>
 {{template "nav"}}
 
 
+      <div class="uk-container uk-padding uk-align-center ">
 
-
-<div class="uk-background-fixed uk-background-center-center uk-height-large" style="background-image: url(/static/img/bg_0723081632.jpg);">
-
-    <div class="uk-container uk-padding uk-align-center ">
-        <form method="post" >
-            <input type="email" name="email" placeholder="email"><br>
-            <input type="text" name="fname" placeholder="first name"><br>
-            <input type="text" name="lname" placeholder="last name"><br>
-              <input type="password" name="password" placeholder="password"><br>
-            <input type="submit">
-
+        <div class="uk-width-1-2" style="padding-left:60px">
+        <form class="uk-grid-small" uk-grid  method="POST" action="/signup">
+          <input type="hidden" name="account_type" value="fast">
+  
+            <div class="uk-width-1-1@s">
+                <input class="uk-input" type="text" placeholder="email" name="email">
+            </div>
+            <div class="uk-width-1-1@s">
+              <input class="uk-input" type="text" placeholder="first name" name="first_name">
+            </div>
+            <div class="uk-width-1-1@s">
+                <input class="uk-input" type="text" placeholder="last name" name="lastname_name">
+            </div>
+            <div class="uk-width-1-1@s">
+                <input class="uk-input" type="text" placeholder="password" name="password">
+            </div>
+            <div class="uk-width-1-1@s">
+              <button class="uk-button uk-button-default uk-button-small">Sign up</button>
+            </div>
         </form>
-        {{if .First}}
-        USER NAME {{.UserName}}<br>
-        FIRST {{.First}}<br>
-        LAST {{.Last}}<br>
-        {{end}}
 
-    </div><!--- container end --->
+
 </div>
+      </div><!--- container end --->
+
+
 {{template "footer"}}
+</body>
+</html>
+{{end}}

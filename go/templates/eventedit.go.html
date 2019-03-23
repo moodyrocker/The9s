@@ -34,16 +34,18 @@
     {{range .}}
         <li>
           <div uk-grid>
-          <div class="uk-width-auto"><span uk-icon="icon: star; ratio:0.8"></span></div>
+          <div class="uk-width-auto"><span uk-icon="icon: star; ratio:1.2"></span></div>
           <div class="uk-width-expand"><a href="{{.Long_url}}">{{.Short_url}}</a></div>
-          <div style="width:20px"><a href="http://127.0.0.1:8081/url/delete?url={{.Url_id}}" uk-icon="icon: trash; ratio:0.8"></a></div>
-          
-          <div style="width:20px"><a href="http://127.0.0.1:8081/url/edit?url={{.Url_id}}" uk-icon="icon: pencil; ratio:0.8"></a></div>
-          <div style="width:20px"><a href="http://127.0.0.1:8081/url/show?url={{.Url_id}}" uk-icon="icon: more; ratio:0.8"></a></div>
+          <div class="uk-width-auto"><a href="http://127.0.0.1:8081/url/delete?url={{.Url_id}}" uk-icon="icon: trash; ratio:1.2"></a></div>
+          <div class="uk-width-auto"><a href="http://127.0.0.1:8081/url/edit?url={{.Url_id}}" uk-icon="icon: pencil; ratio:1.2"></a></div>
         </div>
         </li>
       {{end}}
 </ul>
+
+
+
+
   </div>
   </div>
 
